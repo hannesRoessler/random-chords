@@ -1,33 +1,170 @@
 <html>
-    <head>
-            <link href="https://fonts.googleapis.com/css?family=Boogaloo" rel="stylesheet">
-    </head>
-    <body>
-        <script> 
-        var runMetronome = false;
-            function showChordSymbol(){
-                var chordKey = ["C","F","Bb","Eb","Ab","Db","F#","B","E","A","D","G"]
-                var chordType = ["maj7","-","m7b5","7"]
-                var chordSymbol = chordKey[Math.floor((Math.random() * chordKey.length) + 0)] + chordType[Math.floor((Math.random() * chordType.length) + 0)];
-                document.getElementById("chord-symbol").innerText = chordSymbol;
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Boogaloo" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body onload="generateCheckboxes()">
+    <script>
+        var beat = 0;
+        var timer = null;
+        var chordObj = [
+            { name: "C", checked: true, role: "chordKey" },
+            { name: "C#", checked: true, role: "chordKey" },
+            { name: "Db", checked: true, role: "chordKey" },
+            { name: "D", checked: true, role: "chordKey" },
+            { name: "D#", checked: true, role: "chordKey" },
+            { name: "Eb", checked: true, role: "chordKey" },
+            { name: "E", checked: true, role: "chordKey" },
+            { name: "E#", checked: false, role: "chordKey" },
+            { name: "Fb", checked: false, role: "chordKey" },
+            { name: "F", checked: true, role: "chordKey" },
+            { name: "F#", checked: true, role: "chordKey" },
+            { name: "Gb", checked: true, role: "chordKey" },
+            { name: "G", checked: true, role: "chordKey" },
+            { name: "G#", checked: true, role: "chordKey" },
+            { name: "Ab", checked: true, role: "chordKey" },
+            { name: "A", checked: true, role: "chordKey" },
+            { name: "A#", checked: false, role: "chordKey" },
+            { name: "Bb", checked: true, role: "chordKey" },
+            { name: "B", checked: true, role: "chordKey" },
+            { name: "H", checked: false, role: "chordKey" },
+            { name: "Cb", checked: false, role: "chordKey" },
+            { name: "maj<sup>7</sup>", checked: true, role: "chordType" },
+            { name: "-<sup>7</sup>", checked: true, role: "chordType" },
+            { name: "m<sup>7b5</sup>", checked: true, role: "chordType" },
+            { name: "<sup>7</sup>", checked: true, role: "chordType" },
+        ];
+
+        function showChordSymbol() {
+            var meter = document.getElementById("meter-input").value;
+            var chordKey = chordObj.filter(chordObj => {
+                return chordObj.checked === true && chordObj.role == "chordKey";
+            })
+            var chordType = chordObj.filter(chordObj => {
+                return chordObj.checked === true && chordObj.role == "chordType";
+            })
+            console.log(chordType);
+            var chordSymbol = chordKey[Math.floor((Math.random() * chordKey.length) + 0)].name + chordType[Math.floor((Math.random() * chordType.length) + 0)].name;
+            if (beat == meter) {
+                document.getElementById("chord-symbol").innerHTML = chordSymbol;
+                beat = 0;
             }
-            function tempo(){
-                var beats = document.getElementById("tempo").value;
-                var minute = 60000;
-                tempo = minute / beats ;
-                return tempo;
+        };
+        function tempo() {
+            var beats = document.getElementById("bpm-input").value;
+            var minute = 60000;
+            tempo = minute / beats;
+            return tempo;
+        }
+        function metronome() {
+            document.getElementById("start-button").disabled = true;
+            document.getElementById("meter-input").disabled = true;
+            document.getElementById("bpm-input").disabled = true;
+            timer = setInterval(function () {
+                var audio = new Audio("blip.wav");
+                audio.play();
+                showChordSymbol();
+                beat++;
+            }, tempo());
+        };
+        /*            function stopMetronome() {
+                        clearInterval(timer);
+                    }      
+        */
+
+        function generateCheckboxes() {
+            // TODO - MAKE creation of fieldsets inside modal dynamic dependend on available roles in chordObj
+            for (i = 0; i < chordObj.length; i++) {
+                var checkBox = document.createElement("input");
+                var checkBoxLabel = document.createElement("label");
+                checkBox.setAttribute("type", "checkbox");
+                checkBox.id = chordObj[i].name;
+                checkBox.addEventListener("click", function () { addSelectionToObject(this.id) });
+                if (chordObj[i].checked == true) {
+                    checkBox.checked = true;
+                    console.log(chordObj[i]);
+                }
+                checkBoxLabel.htmlFor = checkBox.id;
+                checkBoxLabel.innerHTML = checkBox.id;
+                document.getElementById(chordObj[i].role + "-fieldset").appendChild(checkBox);
+                document.getElementById(chordObj[i].role + "-fieldset").appendChild(checkBoxLabel);
             }
-            function metronome(){     
-                setInterval(function(){
-                    var audio = new Audio("blip.wav");
-                    audio.play()
-                    showChordSymbol()
-                }, tempo());  
-            }          
-        </script>
-        <div id="chord-symbol" style = "font-family: 'Boogaloo', cursive; font-size: 45px;">Chord symbol</div>
-        <input type="number" name="BMP" min="30" max="320" value="60" id="tempo">
-    <button onclick="metronome()">Try it</button>
-    <button onclick="tempo()">Tempo</button>
-    </body>
+        }
+        function addSelectionToObject(id) {
+            for (i = 0; i < chordObj.length; i++) {
+                if (chordObj[i].name == id) {
+                    console.log(chordObj[i].name);
+                    switch (chordObj[i].checked) {
+                        case false:
+                            chordObj[i].checked = true;
+                            break;
+                        case true:
+                            chordObj[i].checked = false;
+                            break;
+                    }
+                    console.log(chordObj[i].checked);
+                }
+            }
+        };
+        function modal() {
+            // Get the modal
+            var modal = document.getElementById('modal');
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("settings");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            modal.style.display = "block";
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+    </script>
+
+    <div id="wrapper">
+        <div id="chord-symbol">
+            Chord symbol generator
+        </div>
+        <div id="bottom-bar">
+            <div>
+                <input id="bpm-input" type="number" name="BMP" min="30" max="320" value="100" id="tempo"> BPM |
+                <input id="meter-input" type="number" name="METER" min="1" max="9" value="4">/4
+            </div>
+            <div>
+                <button id="start-button" onclick="metronome()">Start</button>
+                <button onclick="location.reload()">Reset</button>
+                <button id="settings" onclick="modal()">Settings</button>
+
+            </div>
+        </div>
+    </div>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <fieldset id="chordKey-fieldset">
+                <legend>Choose keys to include</legend>
+            </fieldset>
+            <fieldset id="chordType-fieldset">
+                <legend>Choose chord types to include</legend>
+            </fieldset>
+        </div>
+    </div>
+</body>
+
 </html>
