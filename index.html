@@ -11,40 +11,41 @@
         var beat = 0;
         var timer = null;
         var chordObj = [
-            { name: "C", checked: true, role: "chordKey" },
-            { name: "C#", checked: true, role: "chordKey" },
-            { name: "Db", checked: true, role: "chordKey" },
-            { name: "D", checked: true, role: "chordKey" },
-            { name: "D#", checked: true, role: "chordKey" },
-            { name: "Eb", checked: true, role: "chordKey" },
-            { name: "E", checked: true, role: "chordKey" },
-            { name: "E#", checked: false, role: "chordKey" },
-            { name: "Fb", checked: false, role: "chordKey" },
-            { name: "F", checked: true, role: "chordKey" },
-            { name: "F#", checked: true, role: "chordKey" },
-            { name: "Gb", checked: true, role: "chordKey" },
-            { name: "G", checked: true, role: "chordKey" },
-            { name: "G#", checked: true, role: "chordKey" },
-            { name: "Ab", checked: true, role: "chordKey" },
-            { name: "A", checked: true, role: "chordKey" },
-            { name: "A#", checked: false, role: "chordKey" },
-            { name: "Bb", checked: true, role: "chordKey" },
-            { name: "B", checked: true, role: "chordKey" },
-            { name: "H", checked: false, role: "chordKey" },
-            { name: "Cb", checked: false, role: "chordKey" },
-            { name: "maj<sup>7</sup>", checked: true, role: "chordType" },
-            { name: "-<sup>7</sup>", checked: true, role: "chordType" },
-            { name: "m<sup>7b5</sup>", checked: true, role: "chordType" },
-            { name: "<sup>7</sup>", checked: true, role: "chordType" },
+            { name: "C", checked: true, mainCat: "chordKey" },
+            { name: "C#", checked: true, mainCat: "chordKey" },
+            { name: "Db", checked: true, mainCat: "chordKey" },
+            { name: "D", checked: true, mainCat: "chordKey" },
+            { name: "D#", checked: true, mainCat: "chordKey" },
+            { name: "Eb", checked: true, mainCat: "chordKey" },
+            { name: "E", checked: true, mainCat: "chordKey" },
+            { name: "E#", checked: false, mainCat: "chordKey" },
+            { name: "Fb", checked: false, mainCat: "chordKey" },
+            { name: "F", checked: true, mainCat: "chordKey" },
+            { name: "F#", checked: true, mainCat: "chordKey" },
+            { name: "Gb", checked: true, mainCat: "chordKey" },
+            { name: "G", checked: true, mainCat: "chordKey" },
+            { name: "G#", checked: true, mainCat: "chordKey" },
+            { name: "Ab", checked: true, mainCat: "chordKey" },
+            { name: "A", checked: true, mainCat: "chordKey" },
+            { name: "A#", checked: false, mainCat: "chordKey" },
+            { name: "Bb", checked: true, mainCat: "chordKey" },
+            { name: "B", checked: true, mainCat: "chordKey" },
+            { name: "H", checked: false, mainCat: "chordKey" },
+            { name: "Cb", checked: false, mainCat: "chordKey" },
+            { name: "maj<sup>7</sup>", checked: true, mainCat: "chordType" },
+            { name: "-<sup>7</sup>", checked: true, mainCat: "chordType" },
+            { name: "m<sup>7b5</sup>", checked: true, mainCat: "chordType" },
+            { name: "<sup>7</sup>", checked: true, mainCat: "chordType" },
+            { name: "sus<sup>4</sup>", checked: false, mainCat: "chordType" },
         ];
 
         function showChordSymbol() {
             var meter = document.getElementById("meter-input").value;
             var chordKey = chordObj.filter(chordObj => {
-                return chordObj.checked === true && chordObj.role == "chordKey";
+                return chordObj.checked === true && chordObj.mainCat == "chordKey";
             })
             var chordType = chordObj.filter(chordObj => {
-                return chordObj.checked === true && chordObj.role == "chordType";
+                return chordObj.checked === true && chordObj.mainCat == "chordType";
             })
             console.log(chordType);
             var chordSymbol = chordKey[Math.floor((Math.random() * chordKey.length) + 0)].name + chordType[Math.floor((Math.random() * chordType.length) + 0)].name;
@@ -63,51 +64,34 @@
             document.getElementById("start-button").disabled = true;
             document.getElementById("meter-input").disabled = true;
             document.getElementById("bpm-input").disabled = true;
-            timer = setInterval(function () {
+            const timer = setInterval(function () {
                 var audio = new Audio("blip.wav");
                 audio.play();
                 showChordSymbol();
                 beat++;
             }, tempo());
         };
-        /*            function stopMetronome() {
-                        clearInterval(timer);
-                    }      
-        */
-
         function generateCheckboxes() {
-            // TODO - MAKE creation of fieldsets inside modal dynamic dependend on available roles in chordObj
-            for (i = 0; i < chordObj.length; i++) {
-                var checkBox = document.createElement("input");
-                var checkBoxLabel = document.createElement("label");
-                checkBox.setAttribute("type", "checkbox");
-                checkBox.id = chordObj[i].name;
-                checkBox.addEventListener("click", function () { addSelectionToObject(this.id) });
-                if (chordObj[i].checked == true) {
-                    checkBox.checked = true;
-                    console.log(chordObj[i]);
-                }
-                checkBoxLabel.htmlFor = checkBox.id;
-                checkBoxLabel.innerHTML = checkBox.id;
-                document.getElementById(chordObj[i].role + "-fieldset").appendChild(checkBox);
-                document.getElementById(chordObj[i].role + "-fieldset").appendChild(checkBoxLabel);
-            }
+            chordObj.map(chord => {
+                if (chord.checked == true) { var checked = "checked" } else { checked = "" } // generate checked attribute for respsective objects
+                let checkBox = `<input type="checkbox" id="${chord.name}" onclick="addSelectionToObject('${chord.name}')" ${checked}>
+                                    <label for="${chord.name}">${chord.name}</label>`
+                document.getElementById(chord.mainCat + "-fieldset").innerHTML += checkBox
+            })
         }
         function addSelectionToObject(id) {
-            for (i = 0; i < chordObj.length; i++) {
-                if (chordObj[i].name == id) {
-                    console.log(chordObj[i].name);
-                    switch (chordObj[i].checked) {
+            chordObj.map(chord => {
+                if (chord.name == id) {
+                    switch (chord.checked) {
                         case false:
-                            chordObj[i].checked = true;
+                            chord.checked = true;
                             break;
                         case true:
-                            chordObj[i].checked = false;
+                            chord.checked = false;
                             break;
                     }
-                    console.log(chordObj[i].checked);
                 }
-            }
+            })
         };
         function modal() {
             // Get the modal
