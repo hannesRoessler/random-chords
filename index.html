@@ -67,9 +67,7 @@
             return tempo;
         }
         function metronome() {
-            document.getElementById("start-button").disabled = true;
-            document.getElementById("meter-input").disabled = true;
-            document.getElementById("bpm-input").disabled = true;
+            disableControls();
             const timer = setInterval(function () {
                 var audio = new Audio("blip.wav");
                 audio.play();
@@ -77,11 +75,14 @@
                 beat++;
             }, tempo());
         };
+        function disableControls() {
+            let controlIDs = ["start-button", "meter-input", "bpm-input"] // IDs of elements to disable while metronome is running
+            controlIDs.map(id => {document.getElementById(id).disabled = true;})
+        }
         function generateCheckboxes() {
             chordObj.map(chordObj => {
-                if (chordObj.checked == true) { var checked = "checked" } else { checked = "" } // generate checked attribute for respsective objects
-                let checkBox = `<input type="checkbox" id="${chordObj.name}" onclick="addSelectionToObject('${chordObj.name}')" ${checked}>
-                                    <label for="${chordObj.name}">${chordObj.name}</label>`
+                let checkBox = `<input type="checkbox" id="${chordObj.name}" onclick="addSelectionToObject('${chordObj.name}')" ${chordObj.checked ? "checked" : ""}>
+                                <label for="${chordObj.name}">${chordObj.name}</label>`
                 document.getElementById(chordObj.mainCat + "-fieldset").innerHTML += checkBox
             })
         }
