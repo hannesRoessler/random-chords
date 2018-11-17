@@ -10,6 +10,7 @@
     <script>
         var beat = 0;
         var timer = null;
+        // TODO: convert to JSON file and import
         var chordObj = [
             { name: "C", checked: true, mainCat: "chordKey" },
             { name: "C#", checked: true, mainCat: "chordKey" },
@@ -32,11 +33,16 @@
             { name: "B", checked: true, mainCat: "chordKey" },
             { name: "H", checked: false, mainCat: "chordKey" },
             { name: "Cb", checked: false, mainCat: "chordKey" },
-            { name: "maj<sup>7</sup>", checked: true, mainCat: "chordType" },
-            { name: "-<sup>7</sup>", checked: true, mainCat: "chordType" },
-            { name: "m<sup>7b5</sup>", checked: true, mainCat: "chordType" },
-            { name: "<sup>7</sup>", checked: true, mainCat: "chordType" },
-            { name: "sus<sup>4</sup>", checked: false, mainCat: "chordType" },
+            { name: "maj<sup>7</sup>", checked: true, mainCat: "chordType", subCat: "Major" },
+            { name: "△<sup>7</sup>", checked: true, mainCat: "chordType", subCat: "Major" },
+            { name: "MA<sup>7</sup>", checked: true, mainCat: "chordType", subCat: "Major" },
+            { name: "-<sup>7</sup>", checked: true, mainCat: "chordType", subCat: "Minor"},
+            { name: "min<sup>7</sup>", checked: true, mainCat: "chordType", subCat: "Minor"},
+            { name: "m<sup>7b5</sup>", checked: true, mainCat: "chordType", subCat: "Half-dimished" },
+            { name: " <sup>⍉</sup>", checked: true, mainCat: "chordType", subCat: "Half-dimished" },
+            { name: "<sup>7</sup>", checked: true, mainCat: "chordType", subCat: "Half-dimished" },
+            { name: "sus<sup>4</sup>", checked: false, mainCat: "chordType", subCat: "Suspended" },
+            // TODO: define subcategories and structure content better
         ];
 
         function showChordSymbol() {
@@ -72,22 +78,22 @@
             }, tempo());
         };
         function generateCheckboxes() {
-            chordObj.map(chord => {
-                if (chord.checked == true) { var checked = "checked" } else { checked = "" } // generate checked attribute for respsective objects
-                let checkBox = `<input type="checkbox" id="${chord.name}" onclick="addSelectionToObject('${chord.name}')" ${checked}>
-                                    <label for="${chord.name}">${chord.name}</label>`
-                document.getElementById(chord.mainCat + "-fieldset").innerHTML += checkBox
+            chordObj.map(chordObj => {
+                if (chordObj.checked == true) { var checked = "checked" } else { checked = "" } // generate checked attribute for respsective objects
+                let checkBox = `<input type="checkbox" id="${chordObj.name}" onclick="addSelectionToObject('${chordObj.name}')" ${checked}>
+                                    <label for="${chordObj.name}">${chordObj.name}</label>`
+                document.getElementById(chordObj.mainCat + "-fieldset").innerHTML += checkBox
             })
         }
         function addSelectionToObject(id) {
-            chordObj.map(chord => {
-                if (chord.name == id) {
-                    switch (chord.checked) {
+            chordObj.map(chordObj => {
+                if (chordObj.name == id) {
+                    switch (chordObj.checked) {
                         case false:
-                            chord.checked = true;
+                            chordObj.checked = true;
                             break;
                         case true:
-                            chord.checked = false;
+                            chordObj.checked = false;
                             break;
                     }
                 }
@@ -122,7 +128,7 @@
 
     <div id="wrapper">
         <div id="chord-symbol">
-            Chord symbol generator
+            Jazz chords<br> generator
         </div>
         <div id="bottom-bar">
             <div>
