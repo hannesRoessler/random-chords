@@ -38,7 +38,9 @@
             { name: "<sup>7</sup>", checked: true, mainCat: "chordType" },
             { name: "sus<sup>4</sup>", checked: false, mainCat: "chordType" },
         ];
-
+        const chordName = chordObj.name;
+        console.log(chordName);
+        console.log(chordObj)
         function showChordSymbol() {
             var meter = document.getElementById("meter-input").value;
             var chordKey = chordObj.filter(chordObj => {
