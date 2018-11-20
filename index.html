@@ -84,14 +84,7 @@
         function addSelectionToObject(id) {
             chordObj.map(chord => {
                 if (chord.name == id) {
-                    switch (chord.checked) {
-                        case false:
-                            chord.checked = true;
-                            break;
-                        case true:
-                            chord.checked = false;
-                            break;
-                    }
+                    (chord.checked) ? chord.checked = false : chord.checked = true        
                 }
             })
         };
