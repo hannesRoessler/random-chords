@@ -8,11 +8,13 @@
 
 <body onload="generateCheckboxes()">
     <script src="app.js"></script>
-    
+
     <div id="wrapper">
+
         <div id="chord-symbol">
             Jazz chords<br> generator
         </div>
+        
         <div id="bottom-bar">
             <div>
                 <input id="bpm-input" type="number" name="BMP" min="30" max="320" value="100" id="tempo"> BPM |
@@ -24,8 +26,9 @@
                 <button id="settings" onclick="modal()">Settings</button>
 
             </div>
-        </div>
+        </div>        
     </div>
+
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -37,6 +40,7 @@
                 <legend>Choose chord types to include</legend>
             </fieldset>
         </div>
+
     </div>
 </body>
 
