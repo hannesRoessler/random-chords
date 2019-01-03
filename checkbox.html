@@ -7,9 +7,9 @@
         flex-direction: row;
         flex-wrap: wrap;
         align-content: center;
+        align-items: center;
       }
-      .checkbox-checked {
-        background-color: red;
+      .checkbox {       
         width: 50px;
         height: 50px;
         line-height: 50px;
@@ -20,20 +20,14 @@
         padding: 3px;
         margin: 3px;
         cursor: pointer;
-        color:white;
       }
-      .checkbox-unchecked {
+      .cb-unchecked {
         background-color: grey;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        border: 1px solid black;
-        border-radius: 10px;
-        text-align: center;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        padding: 3px;
-        margin: 3px;
-        cursor: pointer;
+        color: black;
+      }
+      .cb-checked{
+        background-color: red;
+        color: whie
       }
       * {
         -webkit-touch-callout: none;
@@ -48,26 +42,26 @@
     <script>
       function changeColor(elem) {
      //   var x = document.getElementById("checkbox");
-        elem.className == "checkbox-checked"
-          ? (elem.className = "checkbox-unchecked")
-          : (elem.className = "checkbox-checked");
+        elem.className == "checkbox cb-checked"
+          ? (elem.className = "checkbox cb-unchecked") && (elem.id += "checked")
+          : (elem.className = "checkbox cb-checked") && (elem.id = "unchecked");
       }
     </script>
 
     <div class="container">
-      <div id="checkbox" class="checkbox-checked" onClick="changeColor(this)">
+      <div id="checkbox" class="checkbox cb-checked" onClick="changeColor(this)">
         maj7
       </div>
-      <div id="checkbox" class="checkbox-checked" onClick="changeColor(this)">
+      <div id="checkbox" class="checkbox cb-checked" onClick="changeColor(this)">
         min7
       </div>
-      <div id="checkbox" class="checkbox-checked" onClick="changeColor(this)">
+      <div id="checkbox" class="checkbox cb-checked" onClick="changeColor(this)">
         7
       </div>
-      <div id="checkbox" class="checkbox-checked" onClick="changeColor(this)">
+      <div id="checkbox" class="checkbox cb-checked" onClick="changeColor(this)">
         bla
       </div>
-      <div id="checkbox" class="checkbox-checked" onClick="changeColor(this)">
+      <div id="checkbox" class="checkbox cb-checked" onClick="changeColor(this)">
         7
       </div>
     </div>
