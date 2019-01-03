@@ -41,10 +41,9 @@
   <body>
     <script>
       function changeColor(elem) {
-     //   var x = document.getElementById("checkbox");
         elem.className == "checkbox cb-checked"
-          ? (elem.className = "checkbox cb-unchecked") && (elem.id += "checked")
-          : (elem.className = "checkbox cb-checked") && (elem.id = "unchecked");
+          ? (elem.className = "checkbox cb-unchecked") && (elem.id = "cb-unchecked")
+          : (elem.className = "checkbox cb-checked") && (elem.id = "cb-checked");
       }
     </script>
 

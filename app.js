@@ -126,25 +126,29 @@ function disableControls(param) {
 }
 function generateCheckboxes() {
   chordObj.map(chordObj => {
-    let checkBox = `<input type="checkbox" id="${
-      chordObj.name
-    }" onclick="addSelectionToObject('${chordObj.name}')" ${
-      chordObj.checked ? "checked" : ""
-    }>
-                        <label for="${chordObj.name}">${chordObj.name}</label>`;
-
-    document.getElementById(
-      chordObj.mainCat + "-fieldset"
-    ).innerHTML += checkBox;
+    let checkBox = `<div
+                    id="${chordObj.name}"
+                    class="checkbox ${chordObj.checked ?  "cb-checked" : "cb-unchecked"}"
+                    onClick="changeColor(this); addSelectionToObject('${chordObj.name}')"
+                    > ${chordObj.name}
+                    </div>` 
+    document.getElementById(chordObj.mainCat).innerHTML += checkBox;
   });
 }
 function addSelectionToObject(id) {
   chordObj.map(chord => {
     if (chord.name == id) {
-      chord.checked ? (chord.checked = false) : (chord.checked = true);
+      chord.checked
+        ? (chord.checked = false)
+        : (chord.checked = true);
     }
   });
 }
+ function changeColor(elem) {
+        elem.className == "checkbox cb-checked"
+          ? (elem.className = "checkbox cb-unchecked") && (elem.id = "cb-unchecked")
+          : (elem.className = "checkbox cb-checked") && (elem.id = "cb-checked");
+      }
 function modal() {
   var modal = document.getElementById("modal");
   var btn = document.getElementById("settings");
